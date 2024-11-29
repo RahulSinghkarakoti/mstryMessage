@@ -62,7 +62,7 @@ export async function POST(request: Request) {
       });
 
       await newUser.save();
-      console.log(newUser)
+      // console.log(newUser)
     }
 
     // Send verification email

@@ -55,7 +55,7 @@ export async function GET(request: Request) {
                 status: 200
             })
     } catch (error) {
-        console.log("An unexpected error occure",error)
+        // console.log("An unexpected error occure",error)
         return Response.json({
             success: false,
             message: "Error in getting messages",

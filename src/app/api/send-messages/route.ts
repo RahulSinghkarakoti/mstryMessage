@@ -13,7 +13,7 @@ export async function POST(request:Request)
     
 
     const {username,content}=await request.json()
-    console.log(username,content)
+    // console.log(username,content)
     try {
         const user=await UserModel.findOne({username})
         if(!user)
@@ -48,7 +48,7 @@ export async function POST(request:Request)
                 status: 200
             })
     } catch (error) {
-console.log("error in adding messages",error)
+// console.log("error in adding messages",error)
         return Response.json({
             success: false,
             message: "error in adding messages :: Internal server error ",

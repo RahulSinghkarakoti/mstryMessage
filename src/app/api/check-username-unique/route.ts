@@ -9,7 +9,7 @@ const UsernameQuerySchema = z.object({
 
 export async function GET(request: Request) {
     // localhost:3000/api/cuu/?username=rahul?phone=1234 
-  console.log("checkin username")
+  // console.log("checkin username")
     await dbConnect()
     try {
         const { searchParams } = new URL(request.url)
@@ -29,7 +29,7 @@ export async function GET(request: Request) {
             )
         }
         const { username } = result.data
-        console.log("username->>>",username)
+        // console.log("username->>>",username)
         const existingVerifiedUser = await UserModel.findOne({
             username,
             isVerified: true,
@@ -52,7 +52,7 @@ export async function GET(request: Request) {
             { status: 200 }
           );
     } catch (error) {
-        console.log("error checking username", error)
+        // console.log("error checking username", error)
         return Response.json({
             success: false,
             message: "Error checking username"

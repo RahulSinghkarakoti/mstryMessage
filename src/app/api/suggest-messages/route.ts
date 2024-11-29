@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     const match = text.match(regex);
     if (match !== null) {
       const questions = match[1].split('||');
-      console.log(questions)
+      // console.log(questions)
       return Response.json({
         success: true,
         text: questions
@@ -28,7 +28,7 @@ export async function POST(req: Request) {
         status: 200
       })
     } else {
-      console.log("No questions found.");
+      // console.log("No questions found.");
       return Response.json({
         success: false,
         message:"failedd to fetch suggestions"
