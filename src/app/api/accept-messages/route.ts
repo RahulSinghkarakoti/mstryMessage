@@ -3,8 +3,9 @@ import { authOptions } from "../auth/[...nextauth]/option";
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/models/User.model";
 import { User } from "next-auth";
+import QuestionsModel from "@/models/Questions.model";
 
-export async function POST(request: Request) {
+export async function PUT(request: Request) {
     await dbConnect()
 
     const session = await getServerSession(authOptions)
@@ -20,15 +21,16 @@ export async function POST(request: Request) {
     }
 
     const userId = user._id
-    const { acceptMessages } = await request.json()
+    const { isQuestionActive,questionId } = await request.json()
+    // console.log("is avtive status banekdd->",isQuestionActive)
     try {
 
-        const updatedUser = await UserModel.findByIdAndUpdate(userId, {
-            isAcceptingMessages: acceptMessages
-        }, {
+        const updatedQuestion =
+         await QuestionsModel.findByIdAndUpdate(questionId, {
+            isActive: isQuestionActive}, {
             new: true
         })
-        if (!updatedUser) {
+        if (!updatedQuestion) {
             return Response.json({
                 success: false,
                 message: "failed to update user status to accept messages",
@@ -38,10 +40,12 @@ export async function POST(request: Request) {
                 })
         }
         else {
+        // console.log("in PUT function of accept-msg->",updatedQuestion.isActive)
+
             return Response.json({
                 success: true,
                 message: "message acceptence status updated successfully",
-                updatedUser
+                
             },
                 {
                     status: 200
@@ -73,10 +77,14 @@ export async function GET(request: Request) {
                 status: 401
             })
     }
-    const userId = user._id
+    // const userId = user._id
+    const { searchParams } = new URL(request.url)
+    const questionId =   searchParams.get('questionId')
+    console.log("quesiton ID->",questionId)
+
     try {
-        const foundUser = await UserModel.findById(userId)
-        if (!foundUser) {
+        const questionById = await QuestionsModel.findById(questionId)
+        if (!questionById) {
             return Response.json({
                 success: false,
                 message: "user not found",
@@ -85,10 +93,11 @@ export async function GET(request: Request) {
                     status: 404
                 })
         }
+        console.log("in Get function of accept-msg->",questionById.isActive)
 
         return Response.json({
             success: true,
-            isAcceptingMessages: foundUser.isAcceptingMessages
+            isAcceptingMessages: questionById.isActive
         },
             {
                 status: 200

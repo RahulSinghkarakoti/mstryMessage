@@ -5,6 +5,7 @@ import UserModel from "@/models/User.model";
 import { User } from "next-auth";
 import { messagesSchema } from "@/schemas/messageSchema";
 import {Message} from "@/models/User.model"
+import QuestionsModel from "@/models/Questions.model";
 
 
 export async function POST(request:Request)
@@ -12,7 +13,7 @@ export async function POST(request:Request)
     await dbConnect()
     
 
-    const {username,content}=await request.json()
+    const {username,content,questionId}=await request.json()
     // console.log(username,content)
     try {
         const user=await UserModel.findOne({username})
@@ -37,9 +38,31 @@ export async function POST(request:Request)
                     status: 403
                 })
         }
+
         const newMessage={content,createdAt:new Date()} as Message
-        user.messages.push(newMessage)
-        await user.save()
+
+        const question=await QuestionsModel.findById(questionId)
+        if(!question)
+        {
+            return Response.json({
+                success: false,
+                message: "question not found",
+            },
+                {
+                    status: 404
+                })
+        }
+        if(!question.isActive){
+            return Response.json({
+                success: false,
+                message: "question is not active",
+            },
+                {
+                    status: 403
+                })
+        }
+        question.feedbacks.push(newMessage)
+        await question.save()
         return Response.json({
             success: true,
             message: "Message send successfully",

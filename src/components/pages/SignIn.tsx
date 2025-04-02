@@ -51,7 +51,7 @@ const SignIn = () => {
         })
       }
      if(result?.url){
-        route.replace('/dashboard')
+        route.replace('/')
      }
   } catch (error) {
       console.error(error)

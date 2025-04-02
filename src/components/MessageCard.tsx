@@ -32,10 +32,11 @@ import { useSession } from "next-auth/react";
 
 type MessageCardProps = {
   message: Message;
+  questionId: string;
   onMessageDelete: (messageId: string) => void;
 };
 
-export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
+export function MessageCard({ message,questionId, onMessageDelete }: MessageCardProps) {
   const { toast } = useToast();
    const { data: session } = useSession();
     const userId= session?.user._id 
@@ -43,7 +44,7 @@ export function MessageCard({ message, onMessageDelete }: MessageCardProps) {
   const handleDeleteConfirm = async () => {
     try {
       const response = await axios.post<ApiResponse>(
-        `/api/delete-message?id=${message._id}`,{userId}
+        `/api/delete-message?id=${message._id}`,{userId,questionId}
       );
       toast({
         title: response.data.message,

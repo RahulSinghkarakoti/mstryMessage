@@ -41,6 +41,7 @@ const SendMsg = ({params}:any) => {
       const response = await axios.post("/api/send-messages", {
         ...data,
         username: params.username,
+        questionId: params.questionId,
       });
     //   console.log(response.data);
       toast({
