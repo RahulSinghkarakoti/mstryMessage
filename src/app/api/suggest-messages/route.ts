@@ -29,10 +29,10 @@ export async function POST(req: Request) {
         throw new Error("GEMINI_API_KEY is not defined in the environment variables");
     } 
     const text: string = await generateOpenEndedQuestions(apiKey); 
-    console.log(text);
+    // console.log(text);
     
     const match = text.split("||");
-    console.log(match)
+    // console.log(match)
     if (match !== null) { 
       return Response.json({
         success: true,

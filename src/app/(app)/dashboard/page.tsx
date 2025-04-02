@@ -1,9 +1,9 @@
-import Dashboard from '@/components/pages/Dashboard'
+import Questions from '@/components/pages/Questions'
 import React from 'react'
 
 function page() {
   return (
-     <Dashboard/>
+    <Questions/>
   )
 }
 

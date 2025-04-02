@@ -15,17 +15,18 @@ import { useSession } from "next-auth/react";
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-const Dashboard = () => {
+const Dashboard = ({params}:any) => {
   const [messages, setMessages] = useState<Message[]>([]);
+  const [question,setQuestion] = useState('')
   const [isLoading, setIsLoading] = useState(false);
   const [isSwitchLoading, setIsSwitchLoading] = useState(false);
-
+  const questionId=params.questionId as string
   const { toast } = useToast();
 
 
 
-  const handleDeleteMessage = (messageId:string) => {
-    // console.log(messageId)
+  const handleDeleteMessage = async(messageId:string) => {
+    console.log(messages)
     setMessages(messages.filter((message) => message._id !== messageId));
   };
 
@@ -38,14 +39,15 @@ const Dashboard = () => {
 
   const { register, watch, setValue } = form;
 
-  const acceptMessages=watch('acceptMessages')
+  const isQuestionActive=watch('isQuestionActive')
 
   const fetchAcceptMessages=useCallback(async()=>{
 
     setIsSwitchLoading(true)
     try {
-      const response=await axios.get('/api/accept-messages')
-      setValue('acceptMessages',response.data.isAcceptingMessages)
+      const response=await axios.get(`/api/accept-messages?questionId=${questionId}`)
+      console.log(response.data)
+      setValue('isQuestionActive',response.data.isAcceptingMessages)
     } catch (error) {
       const axiosError= error as AxiosError<ApiResponse>
       toast({
@@ -64,8 +66,12 @@ const Dashboard = () => {
     setIsLoading(true)
     setIsSwitchLoading(false)
     try {
-      const response=await axios.get('/api/get-messages')
-      setMessages(response.data.messages || [])
+      const response=await axios.post('/api/get-messages',{
+        questionId
+      })
+      setQuestion(response.data.message.question)
+      setMessages(response.data.message.feedbacks || [])
+      // console.log(response.data)
       if(refresh)
       {
         toast({
@@ -96,10 +102,11 @@ const Dashboard = () => {
   //handle switch change
   const handleSwitchChange=async()=>{
     try {
-     const response =  await axios.post<ApiResponse>('/api/accept-messages',{
-        acceptMessages:!acceptMessages
+     const response =  await axios.put<ApiResponse>('/api/accept-messages',{
+        isQuestionActive:!isQuestionActive,
+        questionId
       })
-      setValue('acceptMessages',!acceptMessages)
+      setValue('isQuestionActive',!isQuestionActive)
       toast({
         title:response.data.message,
         variant:'default'
@@ -121,7 +128,7 @@ const Dashboard = () => {
   // console.log(session)
   const {username}=session?.user as User
   const baseURL=`${window.location.protocol}//${window.location.host}`
-  const profileURL=`${baseURL}/u/${username}`
+  const profileURL=`${baseURL}/u/${username}/${questionId}`
 
   const copyToClipboard=()=>{
     navigator.clipboard.writeText(profileURL)
@@ -133,7 +140,9 @@ const Dashboard = () => {
 
 
   return  <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
-  <h1 className="text-4xl font-bold mb-4">User Dashboard</h1>
+  <h1 className="text-4xl font-bold mb-4 text-center">{question}</h1>
+  <Separator className="my-4" />
+  <h3 className="text-4xl font-bold mb-4">User Dashboard</h3>
 
   <div className="mb-4">
     <h2 className="text-lg font-semibold mb-2">Copy Your Unique Link</h2>{' '}
@@ -150,13 +159,13 @@ const Dashboard = () => {
 
   <div className="mb-4">
     <Switch
-      {...register('acceptMessages')}
-      checked={acceptMessages}
+      {...register('isQuestionActive')}
+      checked={isQuestionActive}
       onCheckedChange={handleSwitchChange}
       disabled={isSwitchLoading}
     />
     <span className="ml-2">
-      Accept Messages: {acceptMessages ? 'On' : 'Off'}
+      Accept Messages: {isQuestionActive ? 'On' : 'Off'}
     </span>
   </div>
   <Separator />
@@ -180,6 +189,7 @@ const Dashboard = () => {
       messages.map((message, index) => (
         <MessageCard
           key={index}
+          questionId={questionId}
           message={message}
           onMessageDelete={handleDeleteMessage}
         />
