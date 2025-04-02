@@ -2,7 +2,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -117,7 +116,7 @@ function Questions() {
         variant: "destructive",
       });
     }
-  }, [setIsSubmitting]);
+  }, [isSubmitting]);
 
   const handleDelete=async(id:string)=>{
     try {

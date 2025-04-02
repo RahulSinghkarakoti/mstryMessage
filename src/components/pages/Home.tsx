@@ -7,7 +7,6 @@ import {
   ArrowRight,
   BarChart2,
   CheckCircle,
-  Mail,
   Shield,
   TrendingUp,
 } from "lucide-react"; // Assuming you have an icon for messages
@@ -19,24 +18,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import messages from "@/messages.json";
 import Image1 from "@/Images/Hero_section1.svg";
-import Image2 from "@/Images/Data_analysis.svg";
-import Image3 from "@/Images/person1.jpg";
-import Image4 from "@/Images/person2.jpg";
+import Image2 from "@/Images/Data_analysis.svg"; 
 import {
     Avatar,
     AvatarFallback,
     AvatarImage,
   } from "@/components/ui/avatar"
-
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+ 
 import { useSession } from "next-auth/react";
 
 export default function Home() {
@@ -259,15 +248,15 @@ export default function Home() {
         <CardContent className="pt-6">
           <div className="flex items-start gap-4">
             <Avatar>
-              <AvatarImage src={Image3} alt="@shadcn" />
+              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div>
               <p className="text-sm font-medium">Sarah Johnson</p>
               <p className="text-sm text-muted-foreground">HR Director, TechCorp</p>
               <p className="mt-2 text-sm text-gray-600">
-                "FeedbackViz transformed our employee feedback process. We now get honest insights that have helped us
-                improve our workplace culture dramatically."
+              &quot;FeedbackViz transformed our employee feedback process. We now get honest insights that have helped us
+                improve our workplace culture dramatically.&quot;
               </p>
             </div>
           </div>
@@ -277,15 +266,15 @@ export default function Home() {
         <CardContent className="pt-6">
           <div className="flex items-start gap-4">
             <Avatar>
-              <AvatarImage src={Image4} alt="@shadcn" />
+              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div>
               <p className="text-sm font-medium">Michael Chen</p>
               <p className="text-sm text-muted-foreground">Product Manager, InnovateCo</p>
               <p className="mt-2 text-sm text-gray-600">
-                "The visualization tools are incredible. We can immediately see patterns in customer feedback that would
-                have taken weeks to identify manually."
+              &quot;The visualization tools are incredible. We can immediately see patterns in customer feedback that would
+                have taken weeks to identify manually.&quot;
               </p>
             </div>
           </div>
