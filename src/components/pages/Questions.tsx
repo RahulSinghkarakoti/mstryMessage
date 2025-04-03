@@ -160,7 +160,7 @@ function Questions() {
   }, [setIsSubmitting, fetchQuestions]);
 
   return (
-    <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
+    <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6   rounded w-full max-w-6xl">
       <div className="flex flex-col gap-4">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -175,7 +175,7 @@ function Questions() {
                       {...field}
                       placeholder="Type your message here."
                       id="question"
-                      className="border border-slate-300 rounded-lg p-3 resize-none"
+                      className="border border-slate-300 dark:border-[#6fdb67] " 
                     />
                   </FormControl>
                   <FormMessage />
@@ -200,7 +200,7 @@ function Questions() {
       <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
         {questions.length > 0 ? (
           questions.map((item: Question, index) => (
-            <Card className="cursor-pointer" key={index}>
+            <Card className="cursor-pointer dark:bg-slate-900" key={index}>
             <Link href={`dashboard/${item._id}`}  key={index}>
               <CardHeader>
                 <div className="flex justify-between items-center">

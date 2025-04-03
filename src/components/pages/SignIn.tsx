@@ -68,8 +68,8 @@ const SignIn = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-800">
-      <div className="w-full max-w-md p-4   space-y-2 bg-white rounded-lg shadow-md">
+    <div className="flex justify-center items-center min-h-screen bg-white dark:bg-black">
+      <div className="w-full max-w-md py-6 px-4   space-y-2   dark:bg-[#020817b1]  shadow-lg shadow-[#6fdb67]  rounded-xl ">
         <div className="text-center">
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
             Join True Feedback

@@ -139,8 +139,8 @@ const Dashboard = ({params}:any) => {
   }
 
 
-  return  <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
-  <h1 className="text-4xl font-bold mb-4 text-center">{question}</h1>
+  return  <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6  rounded w-full max-w-6xl">
+  <h1 className="text-4xl font-bold mb-4 text-center italic ">"{question}"</h1>
   <Separator className="my-4" />
   <h3 className="text-4xl font-bold mb-4">User Dashboard</h3>
 
@@ -153,7 +153,7 @@ const Dashboard = ({params}:any) => {
         disabled
         className="input input-bordered w-full p-2 mr-2"
       />
-      <Button onClick={copyToClipboard}>Copy</Button>
+      <Button className="bg-[#6fdb67]" onClick={copyToClipboard}>Copy</Button>
     </div>
   </div>
 

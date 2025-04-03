@@ -28,11 +28,32 @@ const SendMsg = ({params}:any) => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuggesting, setIsSuggesting] = useState(false);
+  const [question, setQuestion] = useState("");
   const [messages, setMessages] = useState([]);
 
   const form = useForm<z.infer<typeof messagesSchema>>({
     resolver: zodResolver(messagesSchema),
   });
+
+  const fetchQuestion=async()=>{
+    try {
+      const response = await axios.post("/api/get-question", { 
+        questionId: params.questionId,
+      });
+      console.log(response.data)
+      setQuestion(response.data.question);
+      // return response.data.question
+    } catch (error) {
+      console.error("error in sending message ", error);
+      const axiosError = error as AxiosError<ApiResponse>;
+      let errorMessage = axiosError.response?.data.message;
+      toast({
+        title: "failed to send message",
+        description: errorMessage,
+        variant: "destructive",
+      });
+    }
+  };
 
   const onSubmit = async (data: z.infer<typeof messagesSchema>) => {
     // console.log(data);
@@ -88,6 +109,7 @@ const SendMsg = ({params}:any) => {
   }
 
   useEffect(()=>{
+    fetchQuestion()
     fetchMessages()
   },[])
 
@@ -95,6 +117,7 @@ const SendMsg = ({params}:any) => {
     <div className="flex justify-center p-10 w-full ">
       <div className=" w-[80%]   space-y-8 ">
         <h1 className="text-6xl font-bold text-center">Public Profile Link</h1>
+        <h1 className="text-4xl font-bold text-center italic">"{question}"</h1>
         <div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
