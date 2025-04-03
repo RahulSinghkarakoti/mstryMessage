@@ -17,6 +17,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { signInSchema } from "@/schemas/signInSchema";
 import { signIn } from "next-auth/react";
+import Image from "next/image";
+import Icon from "@/Images/icons8-google.svg";
+import { Separator } from "../ui/separator";
+
 
 const SignIn = () => {
 
@@ -112,9 +116,29 @@ const SignIn = () => {
               {
                 isSubmitting ?"Signing-In" :"Sign-In" }
             </Button>
+            <div className="flex justify-center items-center gap-3 px-4">
+                  <Separator className="bg-zinc-500 h-1 rounded-full w-1/2" />
+                  <p>or</p>
+                  <Separator className="bg-zinc-500 h-1 rounded-full w-1/2" />
+                </div>
           </form>
         </Form>
-        
+        <Button
+          onClick={() => signIn("google",{ callbackUrl: "/" })}
+          className=" w-full     focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-between mr-2 mb-2"
+          variant="outline"
+        >
+            <Image
+                    src={Icon}
+                    alt="Dashboard visualization"
+                    // fill
+                    width={20}
+                    height={20}
+                    // className="object-contain rounded-lg border shadow-lg"
+                    priority
+                  />
+          Sign In with Google<div></div>
+        </Button>
       </div>
     </div>
   );

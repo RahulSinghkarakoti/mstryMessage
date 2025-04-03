@@ -4,11 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Link from "next/link";
-import { useDebounceCallback, useDebounceValue } from "usehooks-ts";
+import { useDebounceCallback } from "usehooks-ts";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { signUpSchema } from "@/schemas/signupSchema";
-import axios, { AxiosAdapter, AxiosError } from "axios";
+import axios, { AxiosError } from "axios";
 import { ApiResponse } from "@/types/ApiResponse";
 import {
   Form,
@@ -20,7 +20,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+
+import Icon from "@/Images/icons8-google.svg";
+
 import { Loader2 } from "lucide-react";
+import { signIn } from "next-auth/react";
+import Image from "next/image";
+import { Separator } from "../ui/separator";
 
 const SignUp = () => {
   const [username, setUsername] = useState("");
@@ -52,11 +58,11 @@ const SignUp = () => {
           const response = await axios.get(
             `/api/check-username-unique?username=${username}`
           );
-        //   console.log(username)
-        //   console.log(response.data.message)
+          //   console.log(username)
+          //   console.log(response.data.message)
           setUsernameMessage(response.data.message);
         } catch (error) {
-            console.error("Error in sign-up of user",error)
+          console.error("Error in sign-up of user", error);
           const axiosError = error as AxiosError<ApiResponse>;
           setUsernameMessage(
             axiosError.response?.data.message ?? "Error checking Username"
@@ -81,7 +87,6 @@ const SignUp = () => {
       route.replace(`/verify/${username}`);
       setIsSubmitting(false);
     } catch (error) {
-       
       console.error("error in sign-up user ", error);
       const axiosError = error as AxiosError<ApiResponse>;
       let errorMessage = axiosError.response?.data.message;
@@ -96,8 +101,8 @@ const SignUp = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-white dark:bg-black">
-      <div className="w-full max-w-md p-4   space-y-2 dark:bg-[#020817b1]   shadow-[#6fdb67] rounded-lg shadow-lg">
-      <div className="text-center">
+      <div className="w-full max-w-md p-4    space-y-2 dark:bg-[#020817b1]   shadow-[#6fdb67] rounded-lg shadow-lg">
+        <div className="text-center">
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
             Join True Feedback
           </h1>
@@ -117,7 +122,6 @@ const SignUp = () => {
                   <FormLabel>Username</FormLabel>
                   <FormControl>
                     <Input
-                     
                       placeholder="Username"
                       {...field}
                       onChange={(e) => {
@@ -168,7 +172,6 @@ const SignUp = () => {
               )}
             />
             <Button type="submit" disabled={isSubmitting}>
-              
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please Wait
@@ -177,14 +180,36 @@ const SignUp = () => {
                 "Sign-Up"
               )}
             </Button>
-          </form>
-        </Form>
         <div className="text-xs">
           Already have an account?{" "}
           <Link href="/sign-in" className="text-blue-600 hover:text-blue-800">
             Login
           </Link>
         </div>
+            <div className="flex justify-center items-center gap-3 px-4">
+                  <Separator className="bg-zinc-500 h-1 rounded-full w-1/2" />
+                  <p>or</p>
+                  <Separator className="bg-zinc-500 h-1 rounded-full w-1/2" />
+                </div>
+          </form>
+        </Form>
+
+        <Button
+          onClick={() => signIn("google",{ callbackUrl: "/" })}
+          className=" w-full     focus:ring-4 focus:outline-none focus:ring-[#4285F4]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center justify-between mr-2 mb-2"
+          variant="outline"
+        >
+            <Image
+                    src={Icon}
+                    alt="Dashboard visualization"
+                    // fill
+                    width={20}
+                    height={20}
+                    // className="object-contain rounded-lg border shadow-lg"
+                    priority
+                  />
+          Sign up with Google<div></div>
+        </Button>
       </div>
     </div>
   );
