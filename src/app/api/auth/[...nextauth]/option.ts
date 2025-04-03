@@ -3,11 +3,16 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { NextAuthOptions } from "next-auth";
 import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/models/User.model";
+import GoogleProvider from "next-auth/providers/google";
 
 
 export const authOptions: NextAuthOptions = {
 
     providers: [
+        GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID || '',
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET || ''
+          }),
         CredentialsProvider({
             id: 'credentials',
             name: 'Credentials',
@@ -45,12 +50,41 @@ export const authOptions: NextAuthOptions = {
         })
     ],
     callbacks:{
-        async jwt({ token, user }) {
-            if(user){
-                token._id = user._id?.toString(),
-                token.isVerified = user.isVerified;
-                token.isAcceptingMessages = user.isAcceptingMessages;
-                token.username = user.username;
+        
+        async jwt({ token, user ,account}) {
+            if(account?.provider=='google'){
+                if(user){
+                    await dbConnect()
+                    const existingUser=await UserModel.findOne({email:user.email})
+                    if(!existingUser){
+                        const newUser=await UserModel.create({
+                            email: user.email,
+                            username: user.name,
+                            isVerified: true, // since Google verified the user
+                            password: "none",
+                        })
+                        token._id=newUser._id?.toString();
+
+                        token.username = user?.name as string;
+                    }
+                    else{
+                        token.username = existingUser?.username as string;
+                        token._id=existingUser._id?.toString()
+                    }
+                     
+                    token.isVerified = user.isVerified;
+                    token.provider=account.provider;
+                    token.email = user.email;
+                }
+
+            }else{
+
+                if(user){
+                    token._id = user._id?.toString(),
+                    token.isVerified = user.isVerified;
+                    token.isAcceptingMessages = user.isAcceptingMessages;
+                    token.username = user.username;
+                }
             }
             return token;
         },
