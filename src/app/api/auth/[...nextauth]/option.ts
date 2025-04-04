@@ -59,13 +59,15 @@ export const authOptions: NextAuthOptions = {
                     if(!existingUser){
                         const newUser=await UserModel.create({
                             email: user.email,
-                            username: user.name,
+                            username: user.name?.replaceAll(' ','_') as string,
+                            verifyCode: "none",
                             isVerified: true, // since Google verified the user
                             password: "none",
+
                         })
                         token._id=newUser._id?.toString();
 
-                        token.username = user?.name as string;
+                        token.username = user?.name?.replaceAll(' ','_') as string;
                     }
                     else{
                         token.username = existingUser?.username as string;

@@ -61,7 +61,7 @@ export function MessageCard({ message,questionId, onMessageDelete }: MessageCard
     }
   };
 
-  const formateTime=()=>{
+    const formateTime=()=>{
     const date = new Date(message.createdAt);
     const monthNames = [
       "January", "February", "March", "April", "May", "June", 

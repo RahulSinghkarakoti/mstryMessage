@@ -71,7 +71,7 @@ const Dashboard = ({params}:any) => {
       })
       setQuestion(response.data.message.question)
       setMessages(response.data.message.feedbacks || [])
-      // console.log(response.data)
+      console.log(response.data.message.feedbacks)
       if(refresh)
       {
         toast({
@@ -184,6 +184,7 @@ const Dashboard = ({params}:any) => {
       <RefreshCcw className="h-4 w-4" />
     )}
   </Button>
+     
   <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
     {messages.length > 0 ? (
       messages.map((message, index) => (
@@ -198,6 +199,7 @@ const Dashboard = ({params}:any) => {
       <p>No messages to display.</p>
     )}
   </div>
+  
 </div>
 };
 
