@@ -16,7 +16,8 @@ export async function middleware(request: NextRequest) {
   }
 
   // Redirect unauthenticated users trying to access /dashboard
-  if (!token && (url.pathname.startsWith('/dashboard') || url.pathname.startsWith('/verify'))) {
+  // 
+  if (!token && (url.pathname.startsWith('/dashboard') || url.pathname.startsWith('/verify') )) {
 
     console.log("------------in middle ware ")
     return NextResponse.redirect(new URL('/sign-in', request.url));
