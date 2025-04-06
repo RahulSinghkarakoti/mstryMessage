@@ -36,6 +36,7 @@
     "react-dom": "18.2.0",
     "react-email": "^1.2.0",
     "react-hook-form": "^7.53.0",
+    "recharts": "^2.15.2",
     "resend": "^4.0.0",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
