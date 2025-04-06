@@ -10,8 +10,9 @@ import { acceptMessageSchema } from "@/schemas/acceptMessageSchema";
 import { ApiResponse } from "@/types/ApiResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
-import { Loader2, RefreshCcw } from "lucide-react";
+import { ChartLine, Loader2, RefreshCcw } from "lucide-react";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -121,6 +122,7 @@ const Dashboard = ({params}:any) => {
     }
   }
 
+ 
   if(!session || !session.user)
     return <div>
       <h1>Please login to view messages</h1>
@@ -169,6 +171,7 @@ const Dashboard = ({params}:any) => {
     </span>
   </div>
   <Separator />
+<div className="flex justify-between items-center">
 
   <Button
     className="mt-4"
@@ -184,6 +187,17 @@ const Dashboard = ({params}:any) => {
       <RefreshCcw className="h-4 w-4" />
     )}
   </Button>
+  <Link href={`/dashboard/${questionId}/analytics`}>
+  <Button
+    className="mt-4 flex justify-between items-center"
+    variant="default" 
+    >
+    <ChartLine />
+    <span className="ml-2">View Analytics</span>
+  </Button>
+    </Link>
+
+    </div>
      
   <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-6">
     {messages.length > 0 ? (

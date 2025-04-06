@@ -1,0 +1,200 @@
+{
+    "question": "How satisfied are you with our product's ease of use?",
+    "feedback": [
+      {
+        "comment": "The interface is incredibly intuitive and requires no learning curve whatsoever.",
+        "rating": 9,
+        "createdAt": "2023-05-15T08:30:45Z"
+      },
+      {
+        "comment": "I struggled to find basic functions and the navigation feels counterintuitive.",
+        "rating": 3,
+        "createdAt": "2023-05-16T11:22:17Z"
+      },
+      {
+        "comment": "This is by far the most user-friendly product in its category. Everything is exactly where you'd expect it to be.",
+        "rating": 10,
+        "createdAt": "2023-05-17T14:05:33Z"
+      },
+      {
+        "comment": "The initial setup was confusing and the tutorial didn't cover important features.",
+        "rating": 4,
+        "createdAt": "2023-05-18T09:45:12Z"
+      },
+      {
+        "comment": "After using it for a week, everything became second nature. The design follows logical patterns.",
+        "rating": 8,
+        "createdAt": "2023-05-19T16:30:28Z"
+      },
+      {
+        "comment": "I constantly have to refer to the help documentation to perform basic tasks.",
+        "rating": 2,
+        "createdAt": "2023-05-20T13:15:42Z"
+      },
+      {
+        "comment": "The mobile app is particularly well-designed with thoughtful gestures and clear icons.",
+        "rating": 9,
+        "createdAt": "2023-05-21T10:08:55Z"
+      },
+      {
+        "comment": "Advanced features are buried too deep in menus and require too many clicks to access.",
+        "rating": 5,
+        "createdAt": "2023-05-22T15:42:19Z"
+      },
+      {
+        "comment": "The search functionality is instant and always returns relevant results exactly where I need them.",
+        "rating": 10,
+        "createdAt": "2023-05-23T12:25:37Z"
+      },
+      {
+        "comment": "Error messages are unclear and don't help me resolve issues when they occur.",
+        "rating": 3,
+        "createdAt": "2023-05-24T17:10:48Z"
+      },
+      {
+        "comment": "The consistent design patterns across all platforms make switching between devices seamless.",
+        "rating": 8,
+        "createdAt": "2023-05-25T08:55:23Z"
+      },
+      {
+        "comment": "I often accidentally trigger actions because buttons are too close together.",
+        "rating": 4,
+        "createdAt": "2023-05-26T11:40:16Z"
+      },
+      {
+        "comment": "The onboarding process brilliantly introduces features progressively without overwhelming new users.",
+        "rating": 9,
+        "createdAt": "2023-05-27T14:33:29Z"
+      },
+      {
+        "comment": "Common actions require too many steps compared to competing products.",
+        "rating": 5,
+        "createdAt": "2023-05-28T09:18:44Z"
+      },
+      {
+        "comment": "The recent redesign has made everything more accessible while maintaining all the power features.",
+        "rating": 8,
+        "createdAt": "2023-05-29T16:05:57Z"
+      },
+      {
+        "comment": "I frequently get lost in the interface and have to start tasks over from the beginning.",
+        "rating": 3,
+        "createdAt": "2023-05-30T13:50:11Z"
+      },
+      {
+        "comment": "Keyboard shortcuts are comprehensive and follow industry standards exactly as I hoped they would.",
+        "rating": 10,
+        "createdAt": "2023-05-31T10:35:25Z"
+      },
+      {
+        "comment": "The dashboard is cluttered with too many options that I never use.",
+        "rating": 4,
+        "createdAt": "2023-06-01T15:20:39Z"
+      },
+      {
+        "comment": "Contextual help appears exactly when needed without being intrusive or distracting.",
+        "rating": 9,
+        "createdAt": "2023-06-02T12:15:52Z"
+      },
+      {
+        "comment": "Basic functionality works well, but advanced features are confusingly organized.",
+        "rating": 6,
+        "createdAt": "2023-06-03T17:00:04Z"
+      },
+      {
+        "comment": "The interface is incredibly intuitive and requires no learning curve whatsoever.",
+        "rating": 9,
+        "createdAt": "2023-05-15T08:30:45Z"
+      },
+      {
+        "comment": "I struggled to find basic functions and the navigation feels counterintuitive.",
+        "rating": 3,
+        "createdAt": "2023-05-16T11:22:17Z"
+      },
+      {
+        "comment": "This is by far the most user-friendly product in its category. Everything is exactly where you'd expect it to be.",
+        "rating": 10,
+        "createdAt": "2023-05-17T14:05:33Z"
+      },
+      {
+        "comment": "The initial setup was confusing and the tutorial didn't cover important features.",
+        "rating": 4,
+        "createdAt": "2023-05-18T09:45:12Z"
+      },
+      {
+        "comment": "After using it for a week, everything became second nature. The design follows logical patterns.",
+        "rating": 8,
+        "createdAt": "2023-05-19T16:30:28Z"
+      },
+      {
+        "comment": "I constantly have to refer to the help documentation to perform basic tasks.",
+        "rating": 2,
+        "createdAt": "2023-05-20T13:15:42Z"
+      },
+      {
+        "comment": "The mobile app is particularly well-designed with thoughtful gestures and clear icons.",
+        "rating": 9,
+        "createdAt": "2023-05-21T10:08:55Z"
+      },
+      {
+        "comment": "Advanced features are buried too deep in menus and require too many clicks to access.",
+        "rating": 5,
+        "createdAt": "2023-05-22T15:42:19Z"
+      },
+      {
+        "comment": "The search functionality is instant and always returns relevant results exactly where I need them.",
+        "rating": 10,
+        "createdAt": "2023-05-23T12:25:37Z"
+      },
+      {
+        "comment": "Error messages are unclear and don't help me resolve issues when they occur.",
+        "rating": 3,
+        "createdAt": "2023-05-24T17:10:48Z"
+      },
+      {
+        "comment": "The consistent design patterns across all platforms make switching between devices seamless.",
+        "rating": 8,
+        "createdAt": "2023-05-25T08:55:23Z"
+      },
+      {
+        "comment": "I often accidentally trigger actions because buttons are too close together.",
+        "rating": 4,
+        "createdAt": "2023-05-26T11:40:16Z"
+      },
+      {
+        "comment": "The onboarding process brilliantly introduces features progressively without overwhelming new users.",
+        "rating": 9,
+        "createdAt": "2023-05-27T14:33:29Z"
+      },
+      {
+        "comment": "Common actions require too many steps compared to competing products.",
+        "rating": 5,
+        "createdAt": "2023-05-28T09:18:44Z"
+      },
+      {
+        "comment": "The recent redesign has made everything more accessible while maintaining all the power features.",
+        "rating": 8,
+        "createdAt": "2023-05-29T16:05:57Z"
+      },
+      {
+        "comment": "I frequently get lost in the interface and have to start tasks over from the beginning.",
+        "rating": 3,
+        "createdAt": "2023-05-30T13:50:11Z"
+      },
+      {
+        "comment": "Keyboard shortcuts are comprehensive and follow industry standards exactly as I hoped they would.",
+        "rating": 10,
+        "createdAt": "2023-05-31T10:35:25Z"
+      },
+      {
+        "comment": "The dashboard is cluttered with too many options that I never use.",
+        "rating": 4,
+        "createdAt": "2023-06-01T15:20:39Z"
+      },
+      {
+        "comment": "Contextual help appears exactly when needed without being intrusive or distracting.",
+        "rating": 9,
+        "createdAt": "2023-06-02T12:15:52Z"
+      }
+    ]
+  }
