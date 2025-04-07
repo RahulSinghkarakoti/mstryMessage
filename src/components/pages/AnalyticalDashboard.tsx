@@ -48,7 +48,7 @@ const AnalyticalDashboard = () => {
               <option>Select metric</option>
             </select>
           </div>
-          <Speedometer
+          {/* <Speedometer
             data={{
               sentiment_distribution: {
                 Positive: 4,
@@ -60,7 +60,7 @@ const AnalyticalDashboard = () => {
                 score: 0.63,
               },
             }}
-          />
+          /> */}
         </div>
 
         {/* Radar Chart */}
