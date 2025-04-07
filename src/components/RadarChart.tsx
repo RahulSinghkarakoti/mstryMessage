@@ -14,25 +14,55 @@ type EmotionRadarProps = {
   data: EmotionData[];
 };
 
+const renderInsideTick = ({ payload, x, y, cx, cy, ...rest }: any) => {
+  const RADIAN = Math.PI / 180;
+  const radiusOffset = 20; // adjust how close to center you want
+  const angle = -payload.coordinate * RADIAN;
+  const newX = cx + (x - cx) * 0.6;
+  const newY = cy + (y - cy) * 0.6;
+
+  return (
+    <text
+      x={newX}
+      y={newY}
+      textAnchor="middle"
+      dominantBaseline="central"
+      fill="#6b7280"
+      fontSize={12}
+    >
+      {payload.value}
+    </text>
+  );
+};
+
 const EmotionRadar = ({ data }:EmotionRadarProps) => {
   return (
-    <div className="w-full h-96">
-      <ResponsiveContainer width="80%" height="100%">
-      <RadarChart outerRadius={90} width={400} height={400} data={data} margin={{right:0, left:0}}>
-        <PolarGrid />
-        <PolarAngleAxis dataKey="emotion" />
-        <PolarRadiusAxis angle={30} domain={[0, 5]} />
-        <Tooltip />
-        <Radar
-          name="Emotion Intensity"
-          dataKey="score"
-          stroke="#8884d8"
-          fill="#8884d8"
-          fillOpacity={0.6}
-        />
-      </RadarChart>
-      </ResponsiveContainer>
-    </div>
+    <div className="w-full  ">
+  {/* <h3 className="text-center text-sm font-semibold mb-2 text-gray-700">Emotion Intensity</h3> */}
+
+  <ResponsiveContainer width="100%" height={250}>
+    <RadarChart cx="50%" cy="50%" outerRadius={100} data={data}>
+      <PolarGrid stroke="#e5e7eb" />
+      {/* <PolarAngleAxis
+        dataKey="emotion"
+        tick={{ fill: "#6b7280", fontSize: 10, fontWeight: 500 }}
+      /> */}
+      <PolarAngleAxis dataKey="emotion" tick={renderInsideTick} />
+      <PolarRadiusAxis tick={false} axisLine={false} />
+
+      <Tooltip />
+      <Radar
+        name="Emotion Intensity"
+        dataKey="score"
+        stroke="#6366f1"
+        fill="#6366f1"
+        fillOpacity={0.4}
+        dot={{ r: 3, fill: "#6366f1" }}
+      />
+    </RadarChart>
+  </ResponsiveContainer>
+</div>
+
   );
 };
 

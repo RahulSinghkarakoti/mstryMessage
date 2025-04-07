@@ -51,8 +51,8 @@ function TrendAnalysisChart({data}:any) {
   <YAxis />
   <CartesianGrid strokeDasharray="3 3" />
   <Tooltip />
-  <Area type="monotone" dataKey="negative" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" />
   <Area type="monotone" dataKey="positive" stroke="#82ca9d" fillOpacity={1} fill="url(#colorPv)" />
+  <Area type="monotone" dataKey="negative" stroke="#8884d8" fillOpacity={1} fill="url(#colorUv)" />
 </AreaChart>
       </ResponsiveContainer>
   )

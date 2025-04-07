@@ -29,7 +29,7 @@ const AnalyticalDashboard = () => {
     Positive: '#00C49F',
     Negative: '#FF4C4C',
     Mixed: '#8884d8',    // fallback color for "Mixed"
-    Neutral: '#FFBB28'   // just in case Neutral appears later
+    Aggregate: '#FFBB28'   // just in case Neutral appears later
   };
 
   
@@ -45,21 +45,23 @@ const AnalyticalDashboard = () => {
       const response = await axios.post("/api/fetch-analysis", {
         questionId,
       });
-      console.log(response.data.data);
+      // console.log(response.data.data);
       setAnalysis(response.data.data);
 
       //code by vijay pro
       const rawDistribution = response.data.data.sentiment_distribution
 
       const mixedData = response.data.data.overall_sentiment
-      const normalizedSentiment: Record<'Positive' | 'Negative' | 'Mixed' |'Neutral', number> = {
-        Neutral:mixedData?.score || 0,
-        Mixed:rawDistribution?.Mixed || 0,
+      console.log(mixedData)
+      console.log(rawDistribution)
+      const normalizedSentiment: Record<'Positive' | 'Negative' | 'Aggregate' |'Mixed', number> = {
         Negative: rawDistribution?.Negative || 0,
         Positive: rawDistribution?.Positive || 0,
+        Mixed:rawDistribution?.Mixed || 0,
+        Aggregate:mixedData?.score || 0,
         
       };
-      console.log(response.data.data)
+      // console.log(response.data.data)
       const chartData: RadialBarDataItem[] = Object.entries(normalizedSentiment).map(
         ([key, value]) => ({
           name: key,
@@ -99,18 +101,16 @@ const AnalyticalDashboard = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-6">
+    <div className="min-h-screen bg-gray-50 p-4 ">
       {/* Main Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-        {/* Speedometer */}
-        <div className="md:col-span-4 bg-white rounded-xl shadow-sm p-4 flex flex-col">
+      <div className="grid grid-cols-1 md:grid-cols-12  gap-2">
+        {/* EmotionRadar */}
+        <div className="md:col-span-3    bg-white rounded-xl shadow-sm p-2 flex flex-col">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold text-gray-800">
-              Performance Meter
+             Emotion
             </h2>
-            <select className="text-sm border rounded-md px-2 py-1">
-              <option>Select metric</option>
-            </select>
+             
           </div>
           {
               loading ? (
@@ -120,12 +120,12 @@ const AnalyticalDashboard = () => {
             }
         </div>
 
-        {/* Radar Chart */}
-        <div className="md:col-span-4 bg-white rounded-xl shadow-sm p-4 flex flex-col">
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">
-            Skills Assessment
+        {/*  Horizontal Bar Chart */}
+        <div className="md:col-span-6     bg-white rounded-xl shadow-sm p-2 flex flex-col">
+          <h2 className="text-lg font-semibold text-gray-800 mb-4 ">
+            Key Topics
           </h2>
-          <div className="flex-1 bg-gray-50 rounded-lg flex items-center justify-center text-gray-400">
+          <div className=" bg-gray-50 rounded-lg flex items-center justify-center text-gray-400">
           {
               loading ? (
                 <span>Loading.....</span>
@@ -135,10 +135,10 @@ const AnalyticalDashboard = () => {
           </div>
         </div>
 
-        {/* Horizontal Bar Chart */}
-        <div className="md:col-span-4 bg-white rounded-xl shadow-sm p-4 flex flex-col">
+        {/* Radar Chart */}
+        <div className="md:col-span-3    bg-white rounded-xl shadow-sm p-2 flex flex-col">
           <h2 className="text-lg font-semibold text-gray-800 mb-4">
-            Quarterly Results
+            Sentiment
           </h2>
           <div className="flex-1 bg-gray-50 rounded-lg flex items-center justify-center text-gray-400">
           {
@@ -152,7 +152,7 @@ const AnalyticalDashboard = () => {
         </div>
 
         {/* Box Plot */}
-        <div className="md:col-span-4 bg-white rounded-xl shadow-sm p-4 flex flex-col">
+        <div className="md:col-span-4    bg-white rounded-xl shadow-sm p-2 flex flex-col">
           <h2 className="text-lg font-semibold text-gray-800 mb-4">
             Confidence & Clarity Metrics
           </h2>
@@ -163,7 +163,7 @@ const AnalyticalDashboard = () => {
         </div>
 
         {/* Area Chart */}
-        <div className="md:col-span-8 bg-white rounded-xl shadow-sm p-4 flex flex-col">
+        <div className="md:col-span-8    bg-white rounded-xl shadow-sm p-2 flex flex-col">
           <h2 className="text-lg font-semibold text-gray-800 mb-4">
             Trend Analysis
           </h2>
