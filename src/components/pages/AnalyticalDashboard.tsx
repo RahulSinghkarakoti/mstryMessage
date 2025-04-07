@@ -2,15 +2,43 @@
 import axios from "axios";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { ResponsiveContainer } from "recharts";
+import { RadarChart, ResponsiveContainer } from "recharts";
 import Speedometer from "../Speedometer";
 import ClarityConfidenceDotPlot from "../ClarityConfidenceDotPlot";
 import { FeedbackAnalysisDocument } from "@/models/FeedbackAnalysis..model";
 import TrendAnalysisChart from "../TrendAnalysisChart";
+import RadialBarChartComponent from "../RadialBarChart";
+import EmotionRadar from "../RadarChart";
+import KeyTopicsChart from "../KeyBarChart";
+
+
 const AnalyticalDashboard = () => {
   const params = useParams();
   const questionId = params.questionId as string;
+
+  type RadialBarDataItem = {
+    name: string;
+    value: number;
+    fill: string;
+  };
+  type BarDataItem = {
+    topic: string;
+    mentions: number;
+  };
+  const sentimentColors: Record<string, string> = {
+    Positive: '#00C49F',
+    Negative: '#FF4C4C',
+    Mixed: '#8884d8',    // fallback color for "Mixed"
+    Neutral: '#FFBB28'   // just in case Neutral appears later
+  };
+
+  
+
   const [analysis, setAnalysis] = useState<FeedbackAnalysisDocument>();
+  const[data, setData] = useState<RadialBarDataItem[]>([]);
+  const[BarDataItem, setBarDataItem] = useState<BarDataItem[]>([]);
+  const[emotionData, setEmotionData] = useState(null);
+  const[loading, setLoading] = useState(true);
 
   const fetchAnalysisData = async () => {
     try {
@@ -19,9 +47,45 @@ const AnalyticalDashboard = () => {
       });
       console.log(response.data.data);
       setAnalysis(response.data.data);
+
+      //code by vijay pro
+      const rawDistribution = response.data.data.sentiment_distribution
+
+      const mixedData = response.data.data.overall_sentiment
+      const normalizedSentiment: Record<'Positive' | 'Negative' | 'Mixed' |'Neutral', number> = {
+        Neutral:mixedData?.score || 0,
+        Mixed:rawDistribution?.Mixed || 0,
+        Negative: rawDistribution?.Negative || 0,
+        Positive: rawDistribution?.Positive || 0,
+        
+      };
+      console.log(response.data.data)
+      const chartData: RadialBarDataItem[] = Object.entries(normalizedSentiment).map(
+        ([key, value]) => ({
+          name: key,
+          value,
+          fill: sentimentColors[key] || '#cccccc' // default color if undefined
+        })
+      );
+
+      const BarData:BarDataItem[] = response.data.data.key_topics_entities.map((item:BarDataItem) => ({
+        topic: item.topic,
+        mentions: item.mentions
+      }));
+
+      const EmotionData = response.data.data.emotion_intensity;
+      console.log(EmotionData)
+
+      setBarDataItem(BarData);
+      setEmotionData(EmotionData);
+      setData(chartData)
+
     } catch (error) {
       console.error("Error fetching analysis data", error);
       // console.log("Error fetching analysis data",error.response)
+    }
+    finally{
+      setLoading(false);
     }
   };
   const scoreData = {
@@ -39,7 +103,7 @@ const AnalyticalDashboard = () => {
       {/* Main Grid */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
         {/* Speedometer */}
-        <div className="md:col-span-3 bg-white rounded-xl shadow-sm p-4 flex flex-col">
+        <div className="md:col-span-4 bg-white rounded-xl shadow-sm p-4 flex flex-col">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-lg font-semibold text-gray-800">
               Performance Meter
@@ -48,19 +112,12 @@ const AnalyticalDashboard = () => {
               <option>Select metric</option>
             </select>
           </div>
-          {/* <Speedometer
-            data={{
-              sentiment_distribution: {
-                Positive: 4,
-                // Negative: 2,
-                // Mixed: 3,
-              },
-              overall_sentiment: {
-                label: "Mixed",
-                score: 0.63,
-              },
-            }}
-          /> */}
+          {
+              loading ? (
+                <span>Loading.....</span>
+              ):(emotionData? (<EmotionRadar data={emotionData}/>):
+              <p>No data to show</p>)
+            }
         </div>
 
         {/* Radar Chart */}
@@ -69,17 +126,28 @@ const AnalyticalDashboard = () => {
             Skills Assessment
           </h2>
           <div className="flex-1 bg-gray-50 rounded-lg flex items-center justify-center text-gray-400">
-            [Radar/Spider Chart]
+          {
+              loading ? (
+                <span>Loading.....</span>
+              ):(BarDataItem? (<KeyTopicsChart data={BarDataItem}/>):
+              <p>No data to show</p>)
+            }
           </div>
         </div>
 
         {/* Horizontal Bar Chart */}
-        <div className="md:col-span-5 bg-white rounded-xl shadow-sm p-4 flex flex-col">
+        <div className="md:col-span-4 bg-white rounded-xl shadow-sm p-4 flex flex-col">
           <h2 className="text-lg font-semibold text-gray-800 mb-4">
             Quarterly Results
           </h2>
           <div className="flex-1 bg-gray-50 rounded-lg flex items-center justify-center text-gray-400">
-            [Horizontal Bar Graph]
+          {
+              loading ? (
+                <span>Loading.....</span>
+              ):(data ? (<RadialBarChartComponent data={data}/>):
+
+              <p>No data to show</p>)
+            }
           </div>
         </div>
 
