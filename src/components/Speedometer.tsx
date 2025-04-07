@@ -1,13 +1,19 @@
-import React from 'react';
-import { RadialBarChart, RadialBar, Legend, Tooltip, ResponsiveContainer } from 'recharts';
+import React from "react";
+import {
+  RadialBarChart,
+  RadialBar,
+  Legend,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 // TypeScript interfaces to define our data structure
 interface SentimentData {
   sentiment_distribution: {
-    Positive: number;
-    Negative: number;
-    Mixed: number;
-    [key: string]: number; // Allow for additional sentiment categories
+    Positive?: number;
+    Negative?: number;
+    Mixed?: number;
+    [key: string]: number | undefined;
   };
   overall_sentiment: {
     label: string;
@@ -20,50 +26,58 @@ interface ChartDataItem {
   value: number;
   fill: string;
   outerRadius: number;
+  isEmpty?: boolean;
 }
 
 const SentimentRadialChart: React.FC<{ data?: SentimentData }> = ({ data }) => {
-  // Default data if none provided
-  const defaultData: SentimentData = {
-    sentiment_distribution: {
-      Positive: 4,
-      Negative: 2,
-      Mixed: 3
-    },
-    overall_sentiment: {
-      label: 'Mixed',
-      score: 0.63
-    }
-  };
-
   // Use provided data or fall back to default
-  const sentimentData = data || defaultData;
+  const sentimentData = data;
 
   // Define sentiment colors
   const sentimentColors: Record<string, string> = {
-    Positive: '#4caf50',
-    Negative: '#f44336',
-    Mixed: '#ff9800'
+    Positive: "#4caf50",
+    Negative: "#f44336",
+    Mixed: "#ff9800",
   };
 
+  // Define all expected sentiment categories
+  const expectedCategories = ["Positive", "Negative", "Mixed"];
+
   // Transform the data for the RadialBarChart
-  const chartData: ChartDataItem[] = Object.entries(sentimentData.sentiment_distribution).map(
-    ([name, value], index) => ({
-      name,
-      value,
-      fill: sentimentColors[name] || `#${Math.floor(Math.random()*16777215).toString(16)}`,
-      outerRadius: 80 + index * 20
-    })
+  const chartData: ChartDataItem[] = expectedCategories.map(
+    (category, index) => {
+      const value = sentimentData?.sentiment_distribution[category];
+      const isEmpty = value === undefined;
+
+      return {
+        name: category,
+        value: isEmpty ? 1 : value!, // Use 1 as placeholder value for empty categories
+        fill: isEmpty ? "#e0e0e0" : sentimentColors[category] || "#999999",
+        outerRadius: 80 + index * 20,
+        isEmpty, // Flag to identify placeholder entries
+      };
+    }
   );
 
   return (
     <div className="w-full">
-     
-      
+      <h3 className="text-lg font-medium mb-1 text-center">
+        Sentiment Distribution
+      </h3>
+      <p className="text-center mb-1">
+        Overall Sentiment:{" "}
+        <span className="font-bold">
+          {sentimentData?.overall_sentiment.label}
+        </span>
+        <span className="ml-2">
+          ({((sentimentData?.overall_sentiment.score ?? 0) * 100).toFixed(0)}%)
+        </span>
+      </p>
+
       <ResponsiveContainer width="100%" height={400}>
-        <RadialBarChart 
-          innerRadius="20%" 
-          outerRadius="90%" 
+        <RadialBarChart
+          innerRadius="20%"
+          outerRadius="90%"
           data={chartData}
           startAngle={180}
           endAngle={0}
@@ -73,12 +87,37 @@ const SentimentRadialChart: React.FC<{ data?: SentimentData }> = ({ data }) => {
             background
             dataKey="value"
             cornerRadius={5}
-            label={{ position: 'insideStart', fill: '#fff', fontWeight: 'bold' }}
           />
-         
-          <Tooltip 
-            formatter={(value: number, name: string) => [`${value} items`, name]}
-            labelFormatter={() => ''}
+
+       
+          <Legend
+            iconSize={10}
+            layout="horizontal" // Changed from "vertical" to "horizontal"
+            verticalAlign="bottom" // Changed from "middle" to "bottom"
+            align="center" // Changed from "right" to "center"
+            wrapperStyle={{ paddingTop: "20px" }} // Changed from paddingLeft to paddingTop
+            formatter={(value, entry) => {
+            //   const { isEmpty } = entry.payload  ;
+              return (
+                <span
+                  style={{
+                    color:  "#333",
+                    fontStyle:  "normal",
+                  }}
+                >
+                  {value} 
+                </span>
+              );
+            }}
+          />
+             <Tooltip
+            formatter={(value: number, name: string, props: any) => {
+              const { isEmpty } = props.payload;
+              return isEmpty
+                ? [`No data available`, name]
+                : [`${value} items`, name];
+            }}
+            labelFormatter={() => ""}
           />
         </RadialBarChart>
       </ResponsiveContainer>
