@@ -229,9 +229,11 @@ const sentToLLM = async (feedbacks: Message[]) => {
             combined.trend_over_time[date].count += 1;
         });
     });
-
+    const multiplySentiments = (sentiment_distribution: Record<string, number>, fixed_number: number) =>
+        Object.fromEntries(Object.entries(sentiment_distribution).map(([k, v]) => [k, v * fixed_number]));
+      
     return {
-        sentiment_distribution: sentimentLabelCounts,
+        sentiment_distribution:multiplySentiments(sentimentLabelCounts,Number (process.env.CHUNK_SIZE  )) ,
         overall_sentiment: {
             label: "Aggregated",
             score: parseFloat(
