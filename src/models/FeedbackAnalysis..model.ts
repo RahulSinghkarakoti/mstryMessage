@@ -11,6 +11,11 @@ interface TrendPoint {
   negative: number;
 }
 
+interface EmotionMetric{
+  emotion:string,
+  score:number
+}
+
 export interface FeedbackAnalysisDocument extends Document {
   questionId: string;
   question: string;
@@ -20,14 +25,12 @@ export interface FeedbackAnalysisDocument extends Document {
     score: number;
   };
   key_topics_entities: KeyTopicEntity[];
-  emotion_intensity: {
-    average_score: number;
-    dominant_emotions: string[];
-  };
+  emotion_intensity:EmotionMetric[];
   suggested_actions: string[];
   trend_over_time: TrendPoint[];
   confidence_clarity: {
     average_clarity_score: number;
+    average_confidence_score:number;
     low_clarity_examples: string[];
   };
   createdAt?: Date;
@@ -52,10 +55,12 @@ const FeedbackAnalysisSchema = new Schema<FeedbackAnalysisDocument>(
         mentions: { type: Number, required: true },
       },
     ],
-    emotion_intensity: {
-      average_score: { type: Number, required: true },
-      dominant_emotions: [{ type: String, required: true }],
-    },
+    emotion_intensity: [
+      {
+        emotion:{type:String,required:true},
+        score:{type:Number , required:true}
+      }
+    ],
     suggested_actions: [{ type: String, required: true }],
     trend_over_time: [
       {
@@ -66,6 +71,8 @@ const FeedbackAnalysisSchema = new Schema<FeedbackAnalysisDocument>(
     ],
     confidence_clarity: {
       average_clarity_score: { type: Number, required: true },
+      average_confidence_score: { type: Number, required: true },
+
       low_clarity_examples: [{ type: String, required: true }],
     },
     createdAt: {

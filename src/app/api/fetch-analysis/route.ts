@@ -105,7 +105,7 @@ const analyzeFeedbacks = async (feedbacks: Message[], question: string, question
         }
     } else {
         console.log("'------no cache found , so calling LLM------'")
-        
+
         const result = await sentToLLM(feedbacks)
         console.log(result)
         console.log("'------no cache found , so calling LLM, storing new record in db------'")
@@ -114,6 +114,7 @@ const analyzeFeedbacks = async (feedbacks: Message[], question: string, question
             question,
             ...result
         })
+        console.log("-------------------this is feedback stored in db ----------------", feedbackAnalysis)
         return feedbackAnalysis
     }
 }
@@ -131,28 +132,36 @@ const sentToLLM = async (feedbacks: Message[]) => {
 
     const results: FeedbackAnalysisDocument[] = await Promise.all(
         chunks.map(async (chunk, idx) => {
-            const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    model: 'mistral/ministral-8b',
-                    messages: [
-                        {
-                            role: 'user',
-                            content: `${prompt}${JSON.stringify(chunk)} and here is the sample output ${JSON.stringify(output)}+ Note:Please return only JSON. No formatting or extra text.`,
-                        },
-                    ],
-                }),
-            })
 
-            const data = await response.json();
-            let rawData = data.choices[0].message.content;
-            let cleanJsonString = rawData.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '');
-            // console.log(cleanJsonString)
-            return { chunkIndex: idx, ...JSON.parse(cleanJsonString) };
+            try {
+                const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        model: 'mistral/ministral-8b',
+                        messages: [
+                            {
+                                role: 'user',
+                                content: `${prompt}${JSON.stringify(chunk)} and here is the sample output ${JSON.stringify(output)}+ Note:Please return only JSON. No formatting or extra text.`,
+                            },
+                        ],
+                    }),
+                })
+
+                //  console.log("--------response----------",response)
+                const data = await response.json();
+                //  console.log("--------data----------",data)
+                let rawData = data.choices[0].message.content;
+                 console.log("--------rawData----------",rawData)
+                let cleanJsonString = rawData.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '');
+                //  console.log("--------cleanJsonString----------",cleanJsonString)
+                return { chunkIndex: idx, ...JSON.parse(cleanJsonString) };
+            } catch (error) {
+                console.log(error)
+            }
         })
     );
 
@@ -168,9 +177,14 @@ const sentToLLM = async (feedbacks: Message[]) => {
             { positive: number; negative: number; count: number }
         >,
         clarity_scores: [] as number[],
+        confidence_score: [] as number[],
         unclear_feedback: [] as string[],
+        emotion_scores_by_type: {} as Record<string, { total: number; count: number }>,
+
+
     };
     const sentimentLabelCounts: Record<string, number> = {};
+
 
 
     results.forEach((res) => {
@@ -185,14 +199,26 @@ const sentToLLM = async (feedbacks: Message[]) => {
                 (combined.key_topics_entities[topic] || 0) + mentions;
         });
 
-        combined.emotion_scores.push(res.emotion_intensity.average_score);
-        combined.dominant_emotions.push(...res.emotion_intensity.dominant_emotions);
+        // combined.emotion_scores.push(res.emotion_intensity.average_score);
+        // combined.dominant_emotions.push(...res.emotion_intensity.dominant_emotions);
         combined.clarity_scores.push(res.confidence_clarity.average_clarity_score);
+        combined.confidence_score.push(res.confidence_clarity.average_confidence_score);
         combined.unclear_feedback.push(...res.confidence_clarity.low_clarity_examples);
 
-        res.suggested_actions.forEach((action) =>
-            combined.suggested_actions.add(action)
-        );
+
+        res.emotion_intensity.forEach(({ emotion, score }) => {
+            if (!combined.emotion_scores_by_type[emotion]) {
+              combined.emotion_scores_by_type[emotion] = { total: 0, count: 0 };
+            }
+            combined.emotion_scores_by_type[emotion].total += score;
+            combined.emotion_scores_by_type[emotion].count += 1;
+          });
+          
+    
+
+            res.suggested_actions.forEach((action) =>
+                combined.suggested_actions.add(action)
+            );
 
         res.trend_over_time.forEach(({ date, positive, negative }) => {
             if (!combined.trend_over_time[date]) {
@@ -216,15 +242,14 @@ const sentToLLM = async (feedbacks: Message[]) => {
         key_topics_entities: Object.entries(combined.key_topics_entities).map(
             ([topic, mentions]) => ({ topic, mentions })
         ),
-        emotion_intensity: {
-            average_score: parseFloat(
-                (
-                    combined.emotion_scores.reduce((a, b) => a + b, 0) /
-                    combined.emotion_scores.length
-                ).toFixed(2)
-            ),
-            dominant_emotions: [...new Set(combined.dominant_emotions)],
-        },
+        emotion_intensity: Object.entries(combined.emotion_scores_by_type).map(
+            ([emotion, { total, count }]) => ({
+              emotion,
+              score: parseFloat((total / count).toFixed(2)),
+            })
+          ),
+          
+
         suggested_actions: Array.from(combined.suggested_actions),
         trend_over_time: Object.entries(combined.trend_over_time).map(
             ([date, val]) => ({
@@ -238,6 +263,11 @@ const sentToLLM = async (feedbacks: Message[]) => {
                 (
                     combined.clarity_scores.reduce((a, b) => a + b, 0) /
                     combined.clarity_scores.length
+                ).toFixed(2)
+            ),
+            average_confidence_score: parseFloat(
+                (
+                    combined.confidence_score.reduce((a, b) => a + b, 0) / combined.confidence_score.length
                 ).toFixed(2)
             ),
             low_clarity_examples: combined.unclear_feedback.slice(0, 5),
