@@ -7,7 +7,7 @@ import React from "react";
 import { z } from "zod";
 import { verifySchema } from "@/schemas/verifySchema";
 import axios, { AxiosError } from "axios";
-import { ApiResponse } from "@/types/ApiResponse";
+import { ApiResponse } from "@/schemas/types/ApiResponse";
 import {
   FormField,
   FormItem,

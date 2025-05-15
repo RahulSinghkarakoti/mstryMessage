@@ -11,7 +11,7 @@ import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import axios, { AxiosError } from "axios";
 import { toast } from "@/hooks/use-toast";
-import { ApiResponse } from "@/types/ApiResponse";
+import { ApiResponse } from "@/schemas/types/ApiResponse";
 import {
   Form,
   FormControl,

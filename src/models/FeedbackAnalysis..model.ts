@@ -34,6 +34,7 @@ export interface FeedbackAnalysisDocument extends Document {
     low_clarity_examples: string[];
   };
   createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const FeedbackAnalysisSchema = new Schema<FeedbackAnalysisDocument>(

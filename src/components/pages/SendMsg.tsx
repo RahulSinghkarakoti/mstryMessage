@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/form";
 import {  z } from "zod";
 import axios, { AxiosError } from "axios";
-import { ApiResponse } from "@/types/ApiResponse";
+import { ApiResponse } from "@/schemas/types/ApiResponse";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
