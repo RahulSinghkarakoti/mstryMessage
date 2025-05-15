@@ -106,7 +106,7 @@ const AnalyticalDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-12  gap-2">
         {/* EmotionRadar */}
         <div className="md:col-span-3    bg-white rounded-xl shadow-sm p-2 flex flex-col">
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex justify-between items-center ">
             <h2 className="text-lg font-semibold text-gray-800">
              Emotion
             </h2>
@@ -122,7 +122,7 @@ const AnalyticalDashboard = () => {
 
         {/*  Horizontal Bar Chart */}
         <div className="md:col-span-6     bg-white rounded-xl shadow-sm p-2 flex flex-col">
-          <h2 className="text-lg font-semibold text-gray-800 mb-4 ">
+          <h2 className="text-lg font-semibold text-gray-800  ">
             Key Topics
           </h2>
           <div className=" bg-gray-50 rounded-lg flex items-center justify-center text-gray-400">
@@ -137,7 +137,7 @@ const AnalyticalDashboard = () => {
 
         {/* Radar Chart */}
         <div className="md:col-span-3    bg-white rounded-xl shadow-sm p-2 flex flex-col">
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">
+          <h2 className="text-lg font-semibold text-gray-800 ">
             Sentiment
           </h2>
           <div className="flex-1 bg-gray-50 rounded-lg flex items-center justify-center text-gray-400">

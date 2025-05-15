@@ -79,12 +79,13 @@ export async function POST(request: Request) {
 
 const analyzeFeedbacks = async (feedbacks: Message[], question: string, questionId: string) => {
 
-    const existingFeedbacks = await FeedbackAnalysisModel.findOne({ question })
+    const existingFeedbacks= await FeedbackAnalysisModel.findOne({ question })
+    console.log("existingFeedbacks----------------->",existingFeedbacks)
     if (existingFeedbacks) {
         console.log("feedback exists")
-        const createdAt: Date = existingFeedbacks.createdAt ? new Date(existingFeedbacks.createdAt) : new Date();
+        const updatedAt: Date = existingFeedbacks.updatedAt ? new Date(existingFeedbacks.updatedAt) : new Date();
         const now: Date = new Date()
-        const diff = now.getTime() - createdAt.getTime()
+        const diff = now.getTime() - updatedAt.getTime()
         const days = Math.round(diff / (1000 * 60 * 60 * 24))
         if (days <= 2) {
             console.log('--------------------------------- cached analysis is called ---------------------------------')
@@ -107,7 +108,7 @@ const analyzeFeedbacks = async (feedbacks: Message[], question: string, question
         console.log("'------no cache found , so calling LLM------'")
 
         const result = await sentToLLM(feedbacks)
-        console.log(result)
+        // console.log(result)
         console.log("'------no cache found , so calling LLM, storing new record in db------'")
         const feedbackAnalysis = await FeedbackAnalysisModel.create({
             questionId,

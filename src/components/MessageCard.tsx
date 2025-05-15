@@ -25,7 +25,7 @@ import { Button } from "./ui/button";
 import { Message } from "@/models/User.model";
 import { useToast } from "@/hooks/use-toast";
 import axios, { AxiosError } from "axios";
-import { ApiResponse } from "@/types/ApiResponse";
+import { ApiResponse } from "@/schemas/types/ApiResponse";
 import { any, string } from "zod";
 import { useSession } from "next-auth/react";
 
